@@ -1,0 +1,55 @@
+name: P05 Student Foundation
+
+on:
+  push:
+    branches:
+      - p05-cp-student-01
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  student-foundation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Generate machine-readable baseline
+        run: python3 scripts/student_system_baseline.py --json > student-baseline.json
+
+      - name: Validate zero-dollar baseline
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          baseline = json.loads(Path("student-baseline.json").read_text(encoding="utf-8"))
+          assert baseline["direct_spend_usd"] == 0
+          assert baseline["secrets_exposed"] == 0
+          assert baseline["paid_services_auto_enabled"] is False
+          print("ZERO_DOLLAR_POLICY=PASS")
+          print("CI_LOCAL_FOUNDATION_READY=" + str(baseline["local_foundation_ready"]).upper())
+          PY
+
+      - name: Student foundation tests
+        run: python3 -m unittest discover -s tests -p 'test_student_system_baseline.py' -v
+
+      - name: Existing Gate Zero regression
+        run: |
+          python3 scripts/validate_gate_zero.py
+          python3 -m unittest discover -s tests -v
+
+      - name: Upload baseline evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: p05-cp-student-01-baseline
+          path: student-baseline.json
+          if-no-files-found: error

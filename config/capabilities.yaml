@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "checkpoint": "P05-CP-STUDENT-01",
+  "name": "#0$ Student Technology OS Foundation",
+  "policy": {
+    "direct_spend_usd": 0,
+    "auto_enable_paid_services": false,
+    "allowed_classes": [
+      "ZERO_NATIVE",
+      "ZERO_STUDENT",
+      "ZERO_QUOTA",
+      "CREDITED",
+      "PAID_OPTIONAL"
+    ]
+  },
+  "capabilities": [
+    {"id":"os","label":"Operating system","class":"ZERO_NATIVE","scope":"local","probe":"platform","required_for_local_ready":true,"persistent_dependency_allowed":true},
+    {"id":"wsl","label":"Windows Subsystem for Linux","class":"ZERO_NATIVE","scope":"local","probe":"wsl","required_for_local_ready":true,"persistent_dependency_allowed":true},
+    {"id":"git","label":"Git","class":"ZERO_NATIVE","scope":"local","probe":"command","command":"git","version_args":["--version"],"required_for_local_ready":true,"persistent_dependency_allowed":true},
+    {"id":"github_cli","label":"GitHub CLI","class":"ZERO_NATIVE","scope":"local","probe":"command","command":"gh","version_args":["--version"],"required_for_local_ready":true,"persistent_dependency_allowed":true},
+    {"id":"docker","label":"Docker CLI","class":"ZERO_NATIVE","scope":"local","probe":"command","command":"docker","version_args":["--version"],"required_for_local_ready":true,"persistent_dependency_allowed":true},
+    {"id":"python","label":"Python","class":"ZERO_NATIVE","scope":"local","probe":"python_runtime","required_for_local_ready":true,"persistent_dependency_allowed":true},
+    {"id":"codex_cli","label":"Codex CLI","class":"ZERO_QUOTA","scope":"local","probe":"command","command":"codex","version_args":["--version"],"required_for_local_ready":false,"persistent_dependency_allowed":false},
+    {"id":"github_student","label":"GitHub Education student entitlement","class":"ZERO_STUDENT","scope":"external","probe":"external_not_probed","required_for_local_ready":false,"persistent_dependency_allowed":false},
+    {"id":"github_actions","label":"GitHub Actions","class":"ZERO_QUOTA","scope":"external","probe":"external_not_probed","required_for_local_ready":false,"persistent_dependency_allowed":true},
+    {"id":"google_colab","label":"Google Colab","class":"ZERO_QUOTA","scope":"external","probe":"external_not_probed","required_for_local_ready":false,"persistent_dependency_allowed":false},
+    {"id":"gemini_api","label":"Gemini Developer API","class":"ZERO_QUOTA","scope":"external","probe":"external_not_probed","required_for_local_ready":false,"persistent_dependency_allowed":false},
+    {"id":"google_cloud_trial","label":"Google Cloud promotional trial","class":"CREDITED","scope":"external","probe":"external_not_probed","required_for_local_ready":false,"persistent_dependency_allowed":false},
+    {"id":"openai_api","label":"OpenAI API","class":"PAID_OPTIONAL","scope":"external","probe":"external_not_probed","required_for_local_ready":false,"persistent_dependency_allowed":false}
+  ]
+}
