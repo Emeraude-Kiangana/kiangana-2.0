@@ -1,0 +1,24 @@
+evidence_id: EVD-2026-005
+mission_id: KIA-2026-005
+project: "KIANGANA 2.0"
+checkpoint: "P05-CP03 — Universal Inference Fabric"
+status: PENDING_MANUAL_EXECUTION
+created: "2026-09-28"
+claims_supported_now:
+  - "adoption architecture and governance artifacts exist on a dedicated branch"
+  - "local preflight and verifier scripts are defined"
+  - "deterministic 429 failover probe is defined"
+claims_not_yet_supported:
+  - "FreeLLMAPI is installed on the operator machine"
+  - "FreeLLMAPI local ping passes"
+  - "two real approved upstream providers are configured"
+  - "live inference passes"
+  - "controlled fallback passes"
+  - "KIF runtime is integrated with FreeLLMAPI"
+required_manual_evidence:
+  - "artifacts/private/P05-CP03-local-verification.json"
+  - "redacted fallback observation"
+  - "Docker container status"
+  - "rollback observation"
+secret_policy: "No credential value may be copied into this evidence file."
+verdict: PENDING
