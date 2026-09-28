@@ -1,0 +1,39 @@
+name: P05 CP03 Adoption Gate
+
+on:
+  push:
+    branches:
+      - "p05-cp03-*"
+  pull_request:
+    paths:
+      - "governance/inference-policy.yaml"
+      - "governance/decisions/ADR-0005-freellmapi-universal-inference-fabric.md"
+      - "missions/KIA-2026-005.yaml"
+      - "evidence/EVD-2026-005.yaml"
+      - "scripts/preflight_freellmapi.sh"
+      - "scripts/verify_freellmapi.py"
+      - "scripts/failover_probe_server.py"
+      - "tests/test_freellmapi_adoption.py"
+      - ".github/workflows/freellmapi-adoption.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  static-adoption-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Shell syntax
+        run: bash -n scripts/preflight_freellmapi.sh
+      - name: Python syntax
+        run: |
+          python3 -m py_compile scripts/verify_freellmapi.py
+          python3 -m py_compile scripts/failover_probe_server.py
+      - name: Repository tests
+        run: python3 -m unittest discover -s tests -v
+      - name: Gate Zero
+        run: python3 scripts/validate_gate_zero.py
