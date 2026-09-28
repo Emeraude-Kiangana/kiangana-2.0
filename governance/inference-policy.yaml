@@ -1,0 +1,44 @@
+version: "0.1"
+policy_id: P05-UIF-ZERO-COST
+project: "KIANGANA 2.0"
+scope: "Universal Inference Fabric / FreeLLMAPI adoption"
+default_decision: block
+
+principles:
+  - "human authority remains final"
+  - "unknown cost is not zero cost"
+  - "provider credentials never enter git"
+  - "FreeLLMAPI routes inference; KIANGANA governs permission and cost"
+  - "direct KIF provider adapters remain a rollback path"
+
+allowed_cost_classes:
+  - NATIVE_0
+  - FREE_PERMANENT
+  - FREE_TIER
+  - STUDENT
+
+conditional_cost_classes:
+  PROMOTIONAL_CREDIT:
+    decision: human_gate
+  PAYG_GUARDED:
+    decision: human_gate
+
+blocked_cost_classes:
+  - PAID_INFRA
+  - UNKNOWN
+
+network:
+  default_bind: "loopback"
+  public_exposure: blocked
+  lan_exposure: human_gate
+
+live_inference:
+  default: blocked
+  unlock_condition: "explicit operator action in local environment"
+
+evidence:
+  secret_redaction: required
+  usage_capture: required
+  provider_route_capture: required
+  cost_claim_without_evidence: prohibited
+  rollback_test: required
