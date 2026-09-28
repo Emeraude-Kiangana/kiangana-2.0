@@ -1,0 +1,46 @@
+mission_id: KIA-2026-005
+title: "Adopter FreeLLMAPI comme Universal Inference Fabric contrôlée"
+project: "KIANGANA 2.0"
+owner: Emeraude-Kiangana
+status: approved
+permission_level: P3
+objective: "Établir une couche locale d'inférence multi-provider sous KIF, gouvernée par le #0$ cost guard et prouvée par des tests reproductibles."
+scope:
+  included:
+    - architecture et décision d'adoption
+    - policy fail-closed pour coût et exposition réseau
+    - installation locale Docker dans WSL2
+    - connexion manuelle de fournisseurs explicitement approuvés
+    - vérification ping, catalogue, inférence minimale et fallback
+    - capture de preuves sans secrets
+    - procédure de rollback
+  excluded:
+    - exposition publique du routeur
+    - multi-tenant
+    - activation automatique d'une route payante
+    - commit de clés API ou jetons
+    - modification ou fusion automatique de main
+    - affirmation de coût nul sans preuve
+acceptance_criteria:
+  - "FreeLLMAPI répond localement sur /api/ping"
+  - "la surface /v1 est accessible uniquement selon la politique locale choisie"
+  - "au moins deux fournisseurs autorisés sont configurés manuellement"
+  - "une requête minimale réussit via le modèle auto"
+  - "un fallback contrôlé entre deux routes est observé"
+  - "aucun secret n'est présent dans Git"
+  - "un artefact de preuve local redacted est produit"
+  - "la procédure de rollback est exécutée ou simulée de façon vérifiable"
+evidence_required:
+  - ADR-0005
+  - governance/inference-policy.yaml
+  - sortie du preflight local
+  - réponse /api/ping
+  - inventaire redacted des routes autorisées
+  - trace redacted d'une requête minimale
+  - trace redacted d'un fallback
+  - résultat de rollback
+human_approval:
+  required: true
+  approver: Emeraude-Kiangana
+  recorded_signal: "Approved in the active session on 2026-09-28 for branch/PR construction; provider-key entry remains manual."
+rollback_plan: "Stopper le conteneur FreeLLMAPI, conserver les données locales hors Git, puis revenir au routage direct KIF vérifié ou à aucun provider."
