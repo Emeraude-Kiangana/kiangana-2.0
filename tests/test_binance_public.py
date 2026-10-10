@@ -29,12 +29,17 @@ class Tests(unittest.TestCase):
         with self.assertRaises(BinancePublicDataError): a.get_spot_price("BTCUSDT")
     def test_no_retry_429(self):
         calls = []
+        error = HTTPError("https://example.invalid", 429, "rate limit", {}, io.BytesIO(b""))
         def opener(req, timeout):
             calls.append(1)
-            raise HTTPError(req.full_url, 429, "rate limit", {}, None)
+            raise error
         a = BinancePublicDataAdapter(opener=opener, retries=2)
-        with self.assertRaises(BinancePublicDataError): a.get_spot_price("BTCUSDT")
-        self.assertEqual(len(calls), 1)
+        try:
+            with self.assertRaises(BinancePublicDataError):
+                a.get_spot_price("BTCUSDT")
+            self.assertEqual(len(calls), 1)
+        finally:
+            error.close()
     def test_no_trade_methods(self):
         self.assertFalse(hasattr(BinancePublicDataAdapter(), "place_order"))
 
